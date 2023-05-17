@@ -3,6 +3,16 @@ Spinnaker Pipeline Builder
 
 A Java library to build Spinnaker pipelines and save them as JSON files.
 
+# Usage
+
+With Gradle:
+
+```gradle
+dependencies {
+    implementation('io.spinnaker.pipeline-builder:pipeline-builder:1.0.0')
+}
+```
+
 # Build the library
 
 ```sh
