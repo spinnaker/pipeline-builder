@@ -1,0 +1,18 @@
+{
+  "dataSources" : {
+    "disabled" : [ ],
+    "enabled" : [ ]
+  },
+  "name" : "app",
+  "platformHealthOnly" : false,
+  "platformHealthOnlyShowOverride" : false,
+  "providerSettings" : {
+    "aws" : {
+      "useAmiBlockDeviceMappings" : false
+    },
+    "gce" : {
+      "associatePublicIpAddress" : false
+    }
+  },
+  "trafficGuards" : [ ]
+}

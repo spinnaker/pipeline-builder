@@ -1,0 +1,30 @@
+{
+  "dataSources" : {
+    "disabled" : [ ],
+    "enabled" : [ ]
+  },
+  "name" : "app",
+  "permissions": {
+    "EXECUTE": [
+      "aGroup"
+    ],
+    "READ": [
+      "0444"
+    ],
+    "WRITE": [
+      "writers",
+      "otherWriters"
+    ]
+  },
+  "platformHealthOnly" : false,
+  "platformHealthOnlyShowOverride" : false,
+  "providerSettings" : {
+    "aws" : {
+      "useAmiBlockDeviceMappings" : false
+    },
+    "gce" : {
+      "associatePublicIpAddress" : false
+    }
+  },
+  "trafficGuards" : [ ]
+}
