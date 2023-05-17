@@ -1,0 +1,33 @@
+plugins {
+    id 'idea'
+    id "com.google.cloud.artifactregistry.gradle-plugin" version "2.2.1" apply false
+}
+
+repositories {
+    mavenCentral()
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+    apply plugin: 'com.google.cloud.artifactregistry.gradle-plugin'
+
+    group = 'io.spinnaker.pipeline-builder'
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
+    publishing {
+        if(System.getenv('CI') == 'true') {
+            repositories {
+                maven {
+                    url = "artifactregistry://us-west2-maven.pkg.dev/spinnaker-monorepo-test/maven"
+                }
+            }
+        }
+        publications {
+            maven(MavenPublication) {
+                from components.java
+            }
+        }
+    }
+}
