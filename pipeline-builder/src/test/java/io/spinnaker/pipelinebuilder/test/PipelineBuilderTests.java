@@ -141,6 +141,16 @@ public class PipelineBuilderTests {
     }
 
     @Test
+    public void pipelineEnabledByDefault() throws JsonProcessingException {
+        Pipeline pipeline = Pipeline.builder()
+                .name("test")
+                .build();
+
+        Map<String, Object> asMap = objectMapper.readValue(pipeline.toJson(), Map.class);
+        Assertions.assertFalse(asMap.containsKey("disabled"));
+    }
+
+    @Test
     public void pipelineMetadata() throws JsonProcessingException {
         String description = "my test pipeline";
         Map<String, String> tags = Map.of("foo", "bar", "hello", "world");

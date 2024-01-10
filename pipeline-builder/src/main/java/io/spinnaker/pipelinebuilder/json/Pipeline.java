@@ -61,6 +61,7 @@ public class Pipeline {
     private String lastModifiedBy;
     private String description;
     private ConditionalExpression stageEnabled;
+    private Boolean disabled;
 
     // these fields have a default value
     private boolean keepWaitingPipelines;
@@ -80,11 +81,12 @@ public class Pipeline {
         Stage stage, List<Stage> stages, PipelineParameter parameter, List<PipelineParameter> parameters, Trigger trigger, List<Trigger> triggers,
         Notification notification, List<Notification> notifications,
         String conditionalOnExpression, PipelineLock locked, ExpectedArtifact expectedArtifact, List<ExpectedArtifact> expectedArtifacts,
-        List<String> roles, Map<String, String> tags) {
+        List<String> roles, Map<String, String> tags, Boolean disabled) {
         this.name = Objects.requireNonNull(name, "Pipeline must have a name");
         this.lastModifiedBy = lastModifiedBy;
         this.description = description;
         this.stageEnabled = conditionalOnExpression != null ? new ConditionalExpression(conditionalOnExpression) : null;
+        this.disabled = disabled;
 
         // default values set here when the constructor parameter is null
         this.keepWaitingPipelines = keepWaitingPipelines != null ? keepWaitingPipelines : false;
