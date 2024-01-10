@@ -70,15 +70,32 @@ public class Base64ArtifactDefinition implements ArtifactDefinition {
      */
     @JsonIgnore protected final String contents;
 
+    /**
+     * Allows for already base64 encoded artifacts to be passed in.
+     * This makes testing improper base64 references and any other logic within
+     * Spinnaker that rely on base64 artifacts.
+     */
+    @JsonIgnore protected final Boolean shouldEncode;
+
     @Builder // this creates a builder with just these two fields
     public Base64ArtifactDefinition(String id, String name, String contents) {
+        this(id, name, contents, true);
+    }
+
+    @Builder // this creates a builder with just these three fields
+    public Base64ArtifactDefinition(String id, String name, String contents, Boolean shouldEncode) {
         this.id = Objects.requireNonNullElse(id, UUID.randomUUID().toString());
         this.name = name;
         this.contents = contents;
+        this.shouldEncode = shouldEncode;
     }
 
     @JsonProperty("reference")
     public String getReference() {
+        if (!shouldEncode) {
+            return contents;
+        }
+
         return contents == null ? null : Base64.getEncoder()
             .encodeToString(contents.getBytes(StandardCharsets.UTF_8));
     }
