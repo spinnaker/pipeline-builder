@@ -32,11 +32,11 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL) // don't serialize null fields
 public class EmptyCustomArtifactDefinition extends Base64ArtifactDefinition {
     public EmptyCustomArtifactDefinition() {
-      super(UUID.randomUUID().toString(), null, "");
+      super(UUID.randomUUID().toString(), null, "", true);
     }
 
     // @Builder comes from Base64ArtifactDefinition
     public EmptyCustomArtifactDefinition(String id) {
-      super(id, null, "");
+      super(id, null, "", true);
     }
 }

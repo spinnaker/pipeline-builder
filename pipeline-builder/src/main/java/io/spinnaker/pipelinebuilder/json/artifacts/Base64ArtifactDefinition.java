@@ -77,17 +77,12 @@ public class Base64ArtifactDefinition implements ArtifactDefinition {
      */
     @JsonIgnore protected final Boolean shouldEncode;
 
-    @Builder // this creates a builder with just these two fields
-    public Base64ArtifactDefinition(String id, String name, String contents) {
-        this(id, name, contents, true);
-    }
-
     @Builder // this creates a builder with just these three fields
     public Base64ArtifactDefinition(String id, String name, String contents, Boolean shouldEncode) {
         this.id = Objects.requireNonNullElse(id, UUID.randomUUID().toString());
         this.name = name;
         this.contents = contents;
-        this.shouldEncode = shouldEncode;
+        this.shouldEncode = shouldEncode == null || shouldEncode;
     }
 
     @JsonProperty("reference")
