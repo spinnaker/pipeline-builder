@@ -59,7 +59,7 @@ public class Stage extends HashMap<String, Object> {
         ExpectedArtifact expectedArtifact, List<ExpectedArtifact> expectedArtifacts,
         String comments, ExecutionWindow restrictExecutionTime) {
 
-        String stageId = id != null ? id : String.valueOf(nextStageId.getAndIncrement()); // not part of builder; generates a unique stage ID
+        String stageId = id != null ? id : nextStageId(); // if `id` is not provided, generates a unique stage ID
         String stageName = Objects.requireNonNull(name, "Stage must have a name");
         put("name", stageName);
         put("refId", stageId);
@@ -126,6 +126,14 @@ public class Stage extends HashMap<String, Object> {
 
         // we store all the keys from the `context` map at the root level of the stage object
         putAll(buildContextMap(context, contextObject));
+    }
+
+    /**
+     * Generates a string containing a number, for use as a unique stage ID.
+     * @return the value from an incrementing atomic counter, guaranteed not to return the same value twice.
+     */
+    public static String nextStageId() {
+        return String.valueOf(nextStageId.getAndIncrement());
     }
 
     private void validateNotificationTypes(final List<Notification> notifications) {
