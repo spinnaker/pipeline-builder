@@ -100,10 +100,15 @@ public class Stage extends HashMap<String, Object> {
             put("sendNotifications", true);
             put("notifications", notifications);
         }
-        List<InputArtifact> resolvedInputArtifacts = ListHelpers.listWithOneOf("inputArtifact", inputArtifact, inputArtifacts, null);
-        if (resolvedInputArtifacts != null && !resolvedInputArtifacts.isEmpty()) {
-            put("inputArtifacts", resolvedInputArtifacts);
+
+        if (inputArtifact != null && inputArtifacts != null) {
+            throw new IllegalArgumentException("Invalid field: 'inputArtifact' and 'inputArtifacts' are mutually exclusive");
+        } else if (inputArtifact != null) {
+            put("inputArtifact", inputArtifact);
+        } else if (inputArtifacts != null && !inputArtifacts.isEmpty()) {
+            put("inputArtifacts", inputArtifacts);
         }
+
         List<ExpectedArtifact> resolvedExpectedArtifacts = ListHelpers.listWithOneOf("expectedArtifact", expectedArtifact, expectedArtifacts, null);
         if (resolvedExpectedArtifacts != null && !resolvedExpectedArtifacts.isEmpty()) {
             put("expectedArtifacts", resolvedExpectedArtifacts);

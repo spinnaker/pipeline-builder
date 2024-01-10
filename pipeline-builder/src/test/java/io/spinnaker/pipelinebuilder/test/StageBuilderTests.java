@@ -17,11 +17,13 @@
 package io.spinnaker.pipelinebuilder.test;
 
 import io.spinnaker.pipelinebuilder.json.Stage;
+import io.spinnaker.pipelinebuilder.json.artifacts.InputArtifact;
 import io.spinnaker.pipelinebuilder.json.notifications.EmailNotification;
 import io.spinnaker.pipelinebuilder.json.notifications.NotificationEvent;
 import io.spinnaker.pipelinebuilder.json.stages.model.StageTypes;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
@@ -128,5 +130,47 @@ public class StageBuilderTests {
     private static Stream<Object[]> provideBooleanValues() {
         return IntStream.range(0, 8).boxed()
                 .map(i -> new Object[] { (i & 4) != 0, (i & 2) != 0, (i & 1) != 0 });
+    }
+
+    @Test
+    public void inputArtifactSingularOrPlural() {
+        InputArtifact minimalInputArtifact = InputArtifact.builder().id("min").build();
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () ->
+            Stage.builder()
+                .name("test")
+                .type("test")
+                .inputArtifact(minimalInputArtifact)
+                .inputArtifacts(List.of(minimalInputArtifact))
+                .build());
+        Assertions.assertTrue(thrown.getMessage().contains("inputArtifact"));
+    }
+
+    @Test
+    public void inputArtifactSingularNotWrapped() {
+        InputArtifact minimalInputArtifact = InputArtifact.builder().id("min").build();
+        Stage stage = Stage.builder()
+            .name("test")
+            .type("test")
+            .inputArtifact(minimalInputArtifact)
+            .build();
+        Assertions.assertNotNull(stage.get("inputArtifact"));
+        Assertions.assertEquals(InputArtifact.class, stage.get("inputArtifact").getClass());
+        Assertions.assertNull(stage.get("inputArtifacts"));
+    }
+
+    @Test
+    public void inputArtifactPluralNullSingular() {
+        List<InputArtifact> inputArtifacts = Stream.of("a1", "a2")
+            .map(id -> InputArtifact.builder().id(id).build())
+            .collect(Collectors.toList());
+        Stage stage = Stage.builder()
+            .name("test")
+            .type("test")
+            .inputArtifacts(inputArtifacts)
+            .build();
+        Assertions.assertNull(stage.get("inputArtifact"));
+        Assertions.assertNotNull(stage.get("inputArtifacts"));
+        Assertions.assertTrue(List.class.isAssignableFrom(stage.get("inputArtifacts").getClass()));
+        Assertions.assertEquals(2, ((List<?>) stage.get("inputArtifacts")).size());
     }
 }
