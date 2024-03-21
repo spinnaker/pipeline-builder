@@ -16,18 +16,11 @@
 
 package io.spinnaker.pipelinebuilder.test;
 
-import io.spinnaker.pipelinebuilder.json.triggers.CronTrigger;
+import io.spinnaker.pipelinebuilder.json.triggers.*;
 import io.spinnaker.pipelinebuilder.json.triggers.CronTrigger.CronTriggerBuilder;
-import io.spinnaker.pipelinebuilder.json.triggers.DockerTrigger;
 import io.spinnaker.pipelinebuilder.json.triggers.DockerTrigger.DockerTriggerBuilder;
-import io.spinnaker.pipelinebuilder.json.triggers.HelmTrigger;
 import io.spinnaker.pipelinebuilder.json.triggers.HelmTrigger.HelmTriggerBuilder;
-import io.spinnaker.pipelinebuilder.json.triggers.PipelineStatus;
-import io.spinnaker.pipelinebuilder.json.triggers.PipelineTrigger;
 import io.spinnaker.pipelinebuilder.json.triggers.PipelineTrigger.PipelineTriggerBuilder;
-import io.spinnaker.pipelinebuilder.json.triggers.Trigger;
-import io.spinnaker.pipelinebuilder.json.triggers.TriggerType;
-import io.spinnaker.pipelinebuilder.json.triggers.WebhookTrigger;
 import io.spinnaker.pipelinebuilder.json.triggers.WebhookTrigger.WebhookTriggerBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -66,6 +59,11 @@ public class TriggerTests {
     public void helmTriggerTypeSerialization() {
         checkSerializedField(buildHelmTriggerWithId(null), "type", TriggerType.HELM.getJsonValue());
     }
+
+  @Test
+  public void gitTriggerTypeSerialization() {
+    checkSerializedField(buildGitTriggerWithId(null), "type", TriggerType.GIT.getJsonValue());
+  }
 
     @Test
     public void pipelineTriggerNeedsApplication() {
@@ -189,7 +187,22 @@ public class TriggerTests {
             .build();
     }
 
-    private DockerTrigger buildDockerTriggerWithId(final String customId) {
+  private GitTrigger buildGitTriggerWithId(final String customId) {
+    final GitTrigger.GitTriggerBuilder builder = GitTrigger.builder();
+    if (customId != null) {
+      builder.id(customId);
+    }
+    return builder
+            .id(customId)
+            .branch("master")
+            .pathConstraint("pathConstraint")
+            .source(GitTriggerSource.GITHUB)
+            .runAsUser("my-service-account")
+            .build();
+  }
+
+
+  private DockerTrigger buildDockerTriggerWithId(final String customId) {
         final DockerTriggerBuilder builder = DockerTrigger.builder();
         if (customId != null) {
             builder.id(customId);
@@ -225,6 +238,14 @@ public class TriggerTests {
         PipelineTrigger pipelineTrigger = buildPipelineTriggerWithId(customId);
         checkSerializedField(pipelineTrigger, "id", customId);
     }
+
+    @Test
+    public void GitTriggerIdCanBeSet() {
+        String customId = "custom-id";
+        GitTrigger gitTrigger = buildGitTriggerWithId(customId);
+        checkSerializedField(gitTrigger, "id", customId);
+    }
+
 
     @Test
     public void dockerTriggerIdCanBeSet() {

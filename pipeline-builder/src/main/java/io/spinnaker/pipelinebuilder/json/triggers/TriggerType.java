@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum TriggerType {
     CRON("cron"),
     DOCKER("docker"),
+    GIT("git"),
     HELM("helm"),
     PIPELINE("pipeline"),
     WEBHOOK("webhook"),
