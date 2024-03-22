@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-class StageCanaryScoreThresholds {
+public class StageCanaryScoreThresholds {
     private int marginal;
     private int pass;
 }

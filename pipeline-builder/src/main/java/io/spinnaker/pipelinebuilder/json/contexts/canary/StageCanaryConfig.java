@@ -7,9 +7,11 @@ import java.util.List;
 
 @Builder
 @Getter
-class StageCanaryConfig {
+public class StageCanaryConfig {
     private String baselineAnalysisOffsetInMins;
     private String lifetimeDuration;
+    private String canaryConfigId;
+    private String metricsAccountName;
     private String canaryAnalysisIntervalMins;
     private String beginCanaryAnalysisAfterMins;
     private List<StageCanaryScope> scopes;
